@@ -46,6 +46,7 @@ exports.read = (req, res) => {
             .populate('tags', '_id name slug')
             .populate('postedBy', '_id name')
             .select('_id title slug excerpt categories postedBy tags createdAt updatedAt')
+            .sort({'createdAt':-1})
             .exec((err, data) => {
                 if (err) {
                     return res.status(400).json({
