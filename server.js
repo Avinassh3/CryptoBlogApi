@@ -14,6 +14,7 @@ const blogRoutes=require('./Routes/blog');
 const userRoutes=require('./Routes/user');
 const categoryRoutes = require('./Routes/category');
 const TagRoutes = require('./Routes/tag');
+const Token=require('./Routes/tokenrelease')
 // app
 const app= express()
 
@@ -48,7 +49,7 @@ app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', TagRoutes);
-
+app.use('/api',Token)
 
 
 const port = process.env.PORT || 8000
