@@ -118,6 +118,22 @@ exports.list = (req, res) => {
         });
 };
 
+exports.listNews = (req, res) => {
+    Blog.find({})
+        .populate('categories', '_id name slug')
+        .populate('tags', '_id name slug')
+        .populate('postedBy', '_id name username')
+        .select('_id title slug body categories tags postedBy createdAt updatedAt')
+        .exec((err, data) => {
+            if (err) {
+                return res.json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(data);
+        });
+};
+
 exports.listAllBlogsCategoriesTags = (req, res) => {
     let limit = req.body.limit ? parseInt(req.body.limit) : 10;
     let skip = req.body.skip ? parseInt(req.body.skip) : 0;
@@ -222,8 +238,11 @@ exports.update = (req, res) => {
             const { body, desc, categories, tags } = fields;
 
             if (body) {
-                oldBlog.excerpt = smartTrim(body, 320, ' ', ' ...');
-                oldBlog.desc = stripHtml(body.substring(0, 160));
+                oldBlog.excerpt = smartTrim(body, 320, ' ', ' ...');     
+            }
+            if(desc)
+            {
+                oldBlog.mdesc = desc;
             }
 
             if (categories) {
